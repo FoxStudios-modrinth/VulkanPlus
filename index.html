@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VulkanPlus - Minecraft Optimization Modpack</title>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles and resets */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: MinecraftSmall;
+        }
+
+        @font-face {
+            font-family: 'MinecraftBig';
+            src: url('http://raw.githubusercontent.com/Mojang/web-theme-bootstrap/refs/heads/main/assets/fonts/Minecraft-Tenv2.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'MinecraftSmall';
+            src: url('http://raw.githubusercontent.com/Mojang/web-theme-bootstrap/refs/heads/main/assets/fonts/Minecraft-Seven_v2.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif; /* Updated font */
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 60%, #2a1a1a 100%); /* Enhanced gradient */
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex; /* Use flexbox for centering content */
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px; /* Add some top padding */
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%; /* Ensure it takes full width on smaller screens */
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.15) 0%, rgba(0, 0, 0, 0.9) 100%); /* Stronger red gradient */
+            backdrop-filter: blur(12px); /* Slightly more blur */
+            padding: 30px 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(220, 38, 38, 0.4); /* Stronger border */
+            width: 100%; /* Full width header */
+            margin-bottom: 40px; /* Space below header */
+        }
+
+        .logo {
+            font-size: 3.5em;
+            color: #ff4444;
+            font-family: MinecraftBig;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(255, 68, 68, 0.5); /* Glowing effect */
+        }
+
+        .tagline {
+            font-size: 1.2em;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        /* Main content section */
+        .main-content {
+            padding: 30px 0; /* Reduced padding as container has padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Version Selector styles */
+        .version-selector {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)); /* Subtle gradient */
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(220, 38, 38, 0.3); /* Stronger border */
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Deeper shadow */
+        }
+
+        .selector-title {
+            font-size: 1.5em;
+            font-family: MinecraftBig;
+            margin-bottom: 30px;
+            color: #ffffff;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+
+        /* Dropdown styles */
+        .dropdown-container {
+            position: relative;
+            margin-bottom: 30px;
+            width: 100%; /* Ensure dropdown button takes full width of its parent */
+            max-width: 400px; /* Match the dropdown width */
+        }
+
+        .dropdown {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Gradient for dropdown button */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px 20px;
+            width: 100%;
+            color: #ffffff;
+            font-size: 1em;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3); /* Inner shadow */
+        }
+
+        .dropdown:hover {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 68, 68, 0.6); /* Stronger hover border */
+            transform: translateY(-1px); /* Slight lift */
+        }
+
+        .dropdown::after {
+            content: '▼';
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown.open::after {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: linear-gradient(145deg, rgba(30, 30, 30, 0.98), rgba(20, 20, 20, 0.98)); /* Darker, more opaque gradient */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Stronger border */
+            border-radius: 10px;
+            margin-top: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6); /* Deeper shadow */
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .dropdown-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 68, 68, 0.2); /* More visible hover */
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); /* Subtle glow */
+        }
+
+        .status-indicator.maintained {
+            background: #22c55e;
+        }
+
+        .status-indicator.archived {
+            background: #f59e0b;
+        }
+
+        .status-indicator.unsupported {
+            background: #ef4444;
+        }
+
+        .status-text {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+
+        .version-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.3); /* Darker background */
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+        }
+
+        /* Latest Download Section */
+        .latest-download {
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .latest-version-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff4444, #cc0000); /* Red gradient */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2em;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 68, 68, 0.6); /* Stronger glow */
+            position: relative; /* For image positioning */
+            overflow: hidden; /* Ensure image stays within circle */
+        }
+
+        .latest-version-circle img {
+            max-width: 80%; /* Adjust size of the logo within the circle */
+            max-height: 80%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7)); /* White glow for logo */
+        }
+
+        .latest-download-btn {
+            background: linear-gradient(135deg, #ff4444, #cc0000); /* Red gradient */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1.1em;
+            box-shadow: 0 8px 20px rgba(255, 68, 68, 0.4); /* Stronger shadow */
+        }
+
+        .latest-download-btn:hover {
+            background: linear-gradient(135deg, #cc0000, #990000);
+            transform: translateY(-3px); /* More pronounced lift */
+            box-shadow: 0 12px 25px rgba(255, 68, 68, 0.6); /* Even stronger shadow */
+        }
+
+        /* Download Section styles */
+        .download-section {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)); /* Subtle gradient */
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid rgba(220, 38, 38, 0.3); /* Stronger border */
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Deeper shadow */
+        }
+
+        .download-title {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #ffffff;
+            font-weight: normal;
+        }
+
+        .version-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .version-item {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)); /* Subtle gradient */
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Subtle item shadow */
+        }
+
+        .version-item:hover {
+            background: rgba(255, 68, 68, 0.15); /* More visible hover */
+            border-color: rgba(255, 68, 68, 0.5); /* Stronger hover border */
+            transform: translateY(-2px); /* Slight lift */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Enhanced hover shadow */
+        }
+
+        .version-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .version-number {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .version-description {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .version-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .version-date {
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1)); /* Greenish gradient */
+            color: #22c55e;
+            padding: 8px 16px;
+            border: 1px solid rgba(34, 197, 94, 0.4); /* Stronger border */
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2); /* Subtle shadow */
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.2));
+            border-color: rgba(34, 197, 94, 0.6); /* Stronger hover border */
+            transform: translateY(-1px); /* Slight lift */
+            box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); /* Enhanced hover shadow */
+        }
+
+        .latest-badge {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(34, 197, 94, 0.3); /* Subtle shadow */
+        }
+
+        .no-versions {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.7;
+            font-size: 1.1em;
+        }
+
+        /* Export Button Style */
+        .export-btn {
+            background: linear-gradient(135deg, #4a4a4a, #333333);
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin-top: 20px; /* Space above the button */
+        }
+
+        .export-btn:hover {
+            background: linear-gradient(135deg, #555555, #444444);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .logo {
+                font-size: 2.5em;
+            }
+            
+            header {
+                padding: 20px 0;
+            }
+
+            .version-selector, .download-section {
+                padding: 20px;
+            }
+            
+            .latest-version-circle {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .version-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">VulkanPlus</div>
+            <div class="tagline">Ultimate Minecraft Optimization Modpack</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="version-selector">
+                <h2 class="selector-title">MINECRAFT VERSION</h2>
+                
+                <div class="dropdown-container">
+                    <div class="dropdown" id="versionDropdown">
+                        <span id="selectedVersionText">Select a version</span>
+                    </div>
+                    <div class="dropdown-menu" id="dropdownMenu"></div>
+                </div>
+
+                <div class="version-status" id="versionStatus" style="display: none;">
+                    <div class="status-indicator" id="statusIndicator"></div>
+                    <span id="statusText"></span>
+                </div>
+            </div>
+
+            <div class="latest-download" id="latestDownload" style="display: none;">
+                <div class="latest-version-circle" id="latestVersionCircle">
+                    <!-- Placeholder for VulkanPlus Logo -->
+                    <img src="https://cdn.modrinth.com/data/BYwO64QC/f6a8c5e64553b33d1ca4896e6a737e8d8b09ab6c_96.webp" alt="VulkanPlus Logo">
+                </div>
+                <a href="#" class="latest-download-btn" id="latestDownloadBtn">Download VulkanPlus</a>
+            </div>
+
+            <div class="download-section" id="downloadSection" style="display: none;">
+                <h2 class="download-title" id="downloadTitle">All Versions</h2>
+                <div class="version-list" id="versionList"></div>
+            </div>
+
+            <!-- New: Export JSON Button -->
+            <button class="export-btn" id="exportJsonBtn">Export Modpack Data as JSON</button>
+        </div>
+    </div>
+
+    <script>
+        // JSON Configuration - You can update this to add/modify versions
+        const modpackData = {
+            "1.21.4": {
+                "status": "maintained",
+                "versions": [
+                    {
+                        "version": "v0.1.1",
+                        "number": "2",
+                        "description": "Updated mods 'Xaero's Mini & World Map' (deleted)",
+                        "date": "2025-6-29",
+                        "downloadUrl": "https://cdn.modrinth.com/data/BYwO64QC/versions/5meBVYv7/VulkanPlus%20v0.2.mrpack",
+                        "latest": true
+                    },
+                    {
+                        "version": "v0.1.0",
+                        "number": "1",
+                        "description": "Added optimization & mods",
+                        "date": "2025-6-29",
+                        "downloadUrl": "https://cdn.modrinth.com/data/BYwO64QC/versions/GQawqwhU/VulkanPlus%20v0.1.mrpack",
+                        "latest": false
+                    }
+                ]
+            }
+        };
+
+        let selectedMinecraftVersion = null;
+        let isDropdownOpen = false;
+
+        function initializeDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            dropdownMenu.innerHTML = '';
+
+            // Sort Minecraft versions from newest to oldest
+            const sortedMcVersions = Object.keys(modpackData).sort((a, b) => {
+                // Simple version comparison, can be improved for complex versioning
+                const partsA = a.split('.').map(Number);
+                const partsB = b.split('.').map(Number);
+
+                for (let i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+                    const numA = partsA[i] || 0;
+                    const numB = partsB[i] || 0;
+                    if (numA > numB) return -1;
+                    if (numA < numB) return 1;
+                }
+                return 0;
+            });
+
+            sortedMcVersions.forEach(mcVersion => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                item.onclick = () => selectVersion(mcVersion);
+                
+                const statusText = modpackData[mcVersion].status === 'maintained' ? 'actively maintained' : 
+                                    modpackData[mcVersion].status === 'archived' ? 'archived' : 'unsupported';
+                
+                item.innerHTML = `
+                    <div class="status-indicator ${modpackData[mcVersion].status}"></div>
+                    <span>${mcVersion}</span>
+                    <span class="status-text">${statusText}</span>
+                `;
+                
+                dropdownMenu.appendChild(item);
+            });
+
+            // Select the first (latest) version by default
+            if (sortedMcVersions.length > 0) {
+                selectVersion(sortedMcVersions[0]);
+            }
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('versionDropdown');
+            const menu = document.getElementById('dropdownMenu');
+            
+            isDropdownOpen = !isDropdownOpen;
+            
+            if (isDropdownOpen) {
+                dropdown.classList.add('open');
+                menu.classList.add('show');
+            } else {
+                dropdown.classList.remove('open');
+                menu.classList.remove('show');
+            }
+        }
+
+        function selectVersion(mcVersion) {
+            selectedMinecraftVersion = mcVersion;
+            
+            // Update dropdown text
+            const selectedText = document.getElementById('selectedVersionText');
+            selectedText.textContent = mcVersion;
+            
+            // Update status
+            const versionStatus = document.getElementById('versionStatus');
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            const status = modpackData[mcVersion].status;
+            const statusMessages = {
+                maintained: 'This version of VulkanPlus is actively maintained and receives regular updates and bug fixes.',
+                archived: 'This version is archived and no longer receives updates.',
+                unsupported: 'This version is no longer supported.'
+            };
+            
+            statusIndicator.className = `status-indicator ${status}`;
+            statusText.textContent = statusMessages[status];
+            versionStatus.style.display = 'flex';
+            
+            // Update latest download section (logo is static, only link changes)
+            const latestVersion = modpackData[mcVersion].versions.find(v => v.latest);
+            if (latestVersion) {
+                const latestDownload = document.getElementById('latestDownload');
+                const latestDownloadBtn = document.getElementById('latestDownloadBtn');
+                
+                latestDownloadBtn.href = latestVersion.downloadUrl;
+                latestDownloadBtn.textContent = `Download VulkanPlus ${mcVersion}`;
+                latestDownload.style.display = 'block';
+            } else {
+                // Hide if no latest version found
+                document.getElementById('latestDownload').style.display = 'none';
+            }
+            
+            // Update version list
+            updateVersionList(mcVersion);
+            
+            // Close dropdown if it was open
+            if (isDropdownOpen) {
+                toggleDropdown();
+            }
+        }
+
+        function updateVersionList(mcVersion) {
+            const versionList = document.getElementById('versionList');
+            const downloadSection = document.getElementById('downloadSection');
+            const downloadTitle = document.getElementById('downloadTitle');
+            const versions = modpackData[mcVersion].versions;
+
+            downloadTitle.textContent = `# All Versions for ${mcVersion}`;
+            downloadSection.style.display = 'block';
+
+            if (versions.length === 0) {
+                versionList.innerHTML = '<div class="no-versions">No versions available for this Minecraft version.</div>';
+                return;
+            }
+
+            versionList.innerHTML = '';
+
+            // Sort versions by number (descending)
+            const sortedVersions = [...versions].sort((a, b) => parseInt(b.number) - parseInt(a.number));
+
+            sortedVersions.forEach(version => {
+                const versionItem = document.createElement('div');
+                versionItem.className = 'version-item';
+                
+                versionItem.innerHTML = `
+                    <div class="version-header">
+                        <span class="version-number">#${version.number}</span>
+                        ${version.latest ? '<span class="latest-badge">Latest</span>' : ''}
+                    </div>
+                    <div class="version-description">${version.description}</div>
+                    <div class="version-footer">
+                        <span class="version-date">${formatDate(version.date)} (${getRelativeTime(version.date)})</span>
+                        <a href="${version.downloadUrl}" class="download-btn" download>vulkanplus-${mcVersion}-${version.number}.mrpack</a>
+                    </div>
+                `;
+                
+                versionList.appendChild(versionItem);
+            });
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit' 
+            }).replace(/\//g, '.');
+        }
+
+        function getRelativeTime(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffTime = Math.abs(now - date);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'today';
+            if (diffDays === 1) return 'yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            if (diffDays < 14) return 'last week';
+            if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+            if (diffDays < 365) return `${Math.floor(diffDays / 30)} months ago`;
+            return `${Math.floor(diffDays / 365)} years ago`;
+        }
+
+        // New function to export modpackData to JSON
+        function exportModpackDataToJson() {
+            const dataStr = JSON.stringify(modpackData, null, 4); // Convert object to JSON string, pretty-printed
+            const blob = new Blob([dataStr], { type: 'application/json' }); // Create a Blob
+            const url = URL.createObjectURL(blob); // Create a URL for the Blob
+            
+            const a = document.createElement('a'); // Create a temporary anchor element
+            a.href = url;
+            a.download = 'vulkanplus_modpack_data.json'; // Set the download file name
+            document.body.appendChild(a); // Append to body (required for Firefox)
+            a.click(); // Programmatically click the link to trigger download
+            document.body.removeChild(a); // Clean up
+            URL.revokeObjectURL(url); // Release the object URL
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeDropdown();
+            
+            // Add dropdown click handler
+            document.getElementById('versionDropdown').addEventListener('click', toggleDropdown);
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (event) => {
+                const dropdown = document.getElementById('versionDropdown');
+                const menu = document.getElementById('dropdownMenu');
+                
+                if (!dropdown.contains(event.target) && !menu.contains(event.target)) {
+                    if (isDropdownOpen) {
+                        toggleDropdown();
+                    }
+                }
+            });
+
+            // Add event listener for the new export button
+            document.getElementById('exportJsonBtn').addEventListener('click', exportModpackDataToJson);
+        });
+    </script>
+</body>
+</html>

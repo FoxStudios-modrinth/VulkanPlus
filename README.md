@@ -1,49 +1,32 @@
-# <center>⚡ VulkanPlus
+# <center>⚡ Vulcanik Optimized <br> <br> ![Client vibes with ESSENTIAL](https://cdn.modrinth.com/data/cached_images/33a90c3f64b014f34d09dedca042c0a6eaae2541.png)
 
-## 👋 Welcome to VulkanPlus
-Vulkan is a **new performance** mod offering the **best efficiency** and **performance**. This modpack adds this mod and other performance mods to give you **more performance** and **FPS**, and **less lags** and **glitches**.
+## 👋 Welcome to Vulcanik
+**Vulcanik Optimized** is a _"new"_ project, that allows you to run minecraft smoother than ever. Currently there is `Vulcanik Fabricified` and `Vulcanik NeoForgified`. You can use it in your modpacks, learn more here.
 
-## 🆕 Planning versions
-We're planning to upgrade from version 1.21.5 to 1.21.7 and 1.21 - 1.21.3. We must wait for Vulkan to release a new version.
-The current modpack only supports version 1.21 - 1.21.5.
+---
+## <center>♻️ Features
 
-## ♻️ OMEGA Update wave
-Now our modpack is available for 1.21 - 1.21.5, newer versions are comming when VulkanMod is supporting this versions.
+## 📝 Minecraft client vibes
+To get the minecraft client vibes, with custom features, cosmetics and more, we have the [**Essential Mod**](https://essential.gg/) installed. There you can get **cosmetics**, **free world host**, **social messanger** and more nice features.
 
-### In Process:
-- ❌ - 1.21.6
-- ❌ - 1.21.7
-- ✅ - 1.21 - 1.21.5
+## 🦊 Foxified Enhancement
+With **Foxified Enhancement** you can get all of optimization in one modpack! With main-character mods like:
+- [Sodium](https://modrinth.com/mod/sodium) 🕶️
+- [Iris](https://modrinth.com/mod/iris) ☀️
+- [Lithium](https://modrinth.com/mod/lithium) 🪽
 
+---
+
+## 🫵 Intigration in your modpack
+Download the modpack and add any mods you need.
+If you plan to **publish** your own modpack, make sure to **include this badge** in your description. <br> <br> ![Built with Vulcanik Optimized](https://badger-api-staging.worldwidepixel.ca/cozy?gradientStart=081227&gradientEnd=02060b&lineOne=Built%20with&lineTwo=Vulcanik%20Optimized&colourOne=FFFFFF&colourTwo=ff6863&iconUrl=https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Volcano/3D/volcano_3d.png)
 
 <details>
-<summary>Old 1.21.4 features</summary>
+<summary>Markdown Copy & Paste</summary>
 
-## ♻️ 1.21.4 features
-- Get more performance from your PC
-- Lags can be reduced
-- Upload your own mods
+`![Built with Vulcanik Optimized](https://badger-api-staging.worldwidepixel.ca/cozy?gradientStart=081227&gradientEnd=02060b&lineOne=Built%20with&lineTwo=Vulcanik%20Optimized&colourOne=FFFFFF&colourTwo=ff6863&iconUrl=https://raw.githubusercontent.com/microsoft/fluentui-emoji/refs/heads/main/assets/Volcano/3D/volcano_3d.png)`
 
 </details>
 
+### *Attention! VulkanMod is NOT intigrated in this modpack!*
 
-
-<details>
-<summary>Current mods</summary>
-
-- [Mod Menu](https://modrinth.com/mod/modmenu)
-- [Text Placeholder API](https://modrinth.com/mod/placeholder-api)
-- [Resourcify](https://modrinth.com/mod/resourcify)
-- [Chat Heads](https://modrinth.com/mod/chat-heads)
-- [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin)
-- [Fabric API](https://modrinth.com/mod/fabric-api)
-- [FerriteCore](https://modrinth.com/mod/ferrite-core)
-- [VulkanMod](https://modrinth.com/mod/vulkanmod)
-
-</details>
-
-## 📢 Requirements
-- Vulkan is supported by most GPUs made after 2015.
-- You should already have the Vulkan drivers if your GPU is compatible.
-
-# GPU not compatible? Check out [**SimpleEnhanced**](https://modrinth.com/project/simpleenhanced)!
